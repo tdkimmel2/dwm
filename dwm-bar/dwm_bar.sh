@@ -32,7 +32,7 @@ export SEP2="]"
 #. "$DIR/bar-functions/dwm_cmus.sh"
 #. "$DIR/bar-functions/dwm_mpc.sh"
 #. "$DIR/bar-functions/dwm_spotify.sh"
-#. "$DIR/bar-functions/dwm_battery.sh"
+. "$DIR/bar-functions/dwm_battery.sh"
 #. "$DIR/bar-functions/dwm_mail.sh"
 #. "$DIR/bar-functions/dwm_backlight.sh"
 #. "$DIR/bar-functions/dwm_pulse.sh"
@@ -90,6 +90,7 @@ do
     lowerbar="$lowerbar${__DWM_BAR_WEATHER__}"
     #lowerbar="$lowerbar${__DWM_BAR_NETWORKMANAGER__}"
     lowerbar="$lowerbar$(dwm_resources)"
+    lowerbar="$lowerbar$(dwm_battery)"
 
     
     #xsetroot -name "$upperbar"
