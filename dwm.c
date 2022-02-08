@@ -1314,7 +1314,8 @@ movemouse(const Arg *arg)
 			&& (abs(nx - c->x) > snap || abs(ny - c->y) > snap))
 				togglefloating(NULL);
 			if (!selmon->lt[selmon->sellt]->arrange || c->isfloating)
-				resize(c, nx, ny, c->w, c->h, 1);
+				//resize(c, nx, ny, c->w, c->h, 1);
+				resize(c, nx, ny, c->w, c->h, 0);
 			break;
 		}
 	} while (ev.type != ButtonRelease);
