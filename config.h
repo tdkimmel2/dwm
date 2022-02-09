@@ -1,8 +1,9 @@
 /* See LICENSE file for copyright and license details. */
 #include <X11/XF86keysym.h> //Media Keys
+#include "movestack.c"
+#include "moveresize.c"
 #include "fibonacci.c"
 #include "centeredMaster.c"
-#include "movestack.c"
 
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
