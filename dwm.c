@@ -1314,8 +1314,7 @@ movemouse(const Arg *arg)
 			&& (abs(nx - c->x) > snap || abs(ny - c->y) > snap))
 				togglefloating(NULL);
 			if (!selmon->lt[selmon->sellt]->arrange || c->isfloating)
-				//resize(c, nx, ny, c->w, c->h, 1);
-				resize(c, nx, ny, c->w, c->h, 0);
+				resize(c, nx, ny, c->w, c->h, 0);// 0 fixed bug where moving would snap to the far left edge
 			break;
 		}
 	} while (ev.type != ButtonRelease);
@@ -1396,7 +1395,7 @@ moveresize(const Arg *arg) {
 
 	XRaiseWindow(dpy, c->win);
 	Bool xqp = XQueryPointer(dpy, root, &dummy, &dummy, &msx, &msy, &dx, &dy, &dui);
-	resize(c, nx, ny, nw, nh, True);
+	resize(c, nx, ny, nw, nh, False);// False fixed bug where moving would snap to the far left edge
 
 	/* move cursor along with the window to avoid problems caused by the sloppy focus */
 	if (xqp && ox <= msx && (ox + ow) >= msx && oy <= msy && (oy + oh) >= msy)
@@ -1547,7 +1546,7 @@ resizemouse(const Arg *arg)
 					togglefloating(NULL);
 			}
 			if (!selmon->lt[selmon->sellt]->arrange || c->isfloating)
-				resize(c, c->x, c->y, nw, nh, 1);
+				resize(c, c->x, c->y, nw, nh, 0);// 0 fixed bug where moving would snap to the far left edge
 			break;
 		}
 	} while (ev.type != ButtonRelease);
