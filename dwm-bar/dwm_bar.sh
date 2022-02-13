@@ -24,8 +24,8 @@ export SEP2="]"
 # Import the modules
 . "$DIR/bar-functions/dwm_resources.sh"
 . "$DIR/bar-functions/dwm_alsa.sh"
-. "$DIR/bar-functions/dwm_weather.sh"
 . "$DIR/bar-functions/dwm_date.sh"
+#. "$DIR/bar-functions/dwm_weather.sh"
 #. "$DIR/bar-functions/dwm_countdown.sh"
 #. "$DIR/bar-functions/dwm_alarm.sh"
 #. "$DIR/bar-functions/dwm_transmission.sh"
@@ -48,7 +48,7 @@ parallelize() {
     while true
     do
         printf "Running parallel processes\n"
-        dwm_weather &
+        #dwm_weather &
         #dwm_networkmanager &
         sleep 60
     done
@@ -87,7 +87,7 @@ do
     lowerbar=""
     lowerbar="$lowerbar$(dwm_date)"
     lowerbar="$lowerbar$(dwm_alsa)"
-    lowerbar="$lowerbar${__DWM_BAR_WEATHER__}"
+    #lowerbar="$lowerbar${__DWM_BAR_WEATHER__}"
     #lowerbar="$lowerbar${__DWM_BAR_NETWORKMANAGER__}"
     lowerbar="$lowerbar$(dwm_resources)"
     lowerbar="$lowerbar$(dwm_battery)"
