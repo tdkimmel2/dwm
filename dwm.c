@@ -1914,6 +1914,7 @@ unmanage(Client *c, int destroyed)
         wc.border_width = c->oldbw;
         XGrabServer(dpy); /* avoid race conditions */
         XSetErrorHandler(xerrordummy);
+        XSelectInput(dpy, c->win, NoEventMask);
         XConfigureWindow(dpy, c->win, CWBorderWidth, &wc); /* restore border */
         XUngrabButton(dpy, AnyButton, AnyModifier, c->win);
         setclientstate(c, WithdrawnState);
