@@ -72,7 +72,7 @@ static const char *dmenucmd[] = { "dmenu_run", "-fn", dmenufont, "-nb", col_gray
 static const char *termcmd[]  = { "st", NULL };
 static const char *volupcmd[] = { "/bin/sh", "-c", "amixer -D default sset Master Playback 5%+; kill -44 $(pidof dwmblocks)" };
 static const char *voldowncmd[] = { "/bin/sh", "-c", "amixer -D default sset Master Playback 5%-; kill -44 $(pidof dwmblocks)" };
-static const char *volmutecmd[] = { "/bin/sh", "-c", "amixer -D default sset Master Playback 0%; kill -44 $(pidof dwmblocks)" };
+static const char *volmutecmd[] = { "/bin/sh", "-c", "amixer set Master toggle; kill -44 $(pidof dwmblocks)" };
 //static const char *volmaxcmd[] = { "/bin/sh", "-c", "amixer -D default sset Master Playback 100%" };
 
 static const Key keys[] = {
@@ -139,9 +139,6 @@ static const Button buttons[] = {
 	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
 	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
-	{ ClkStatusText,        0,              Button1,        sigstatusbar,   {.i = 1} },
-	{ ClkStatusText,        0,              Button2,        sigstatusbar,   {.i = 2} },
-	{ ClkStatusText,        0,              Button3,        sigstatusbar,   {.i = 3} },
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
 	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
 	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
@@ -149,5 +146,10 @@ static const Button buttons[] = {
 	{ ClkTagBar,            0,              Button3,        toggleview,     {0} },
 	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
+	{ ClkStatusText,        0,              Button1,        sigdwmblocks,   {.i = 1} },
+	{ ClkStatusText,        0,              Button2,        sigdwmblocks,   {.i = 2} },
+	{ ClkStatusText,        0,              Button3,        sigdwmblocks,   {.i = 3} },
+	{ ClkStatusText,        0,              Button4,        sigdwmblocks,   {.i = 4} },
+	{ ClkStatusText,        0,              Button5,        sigdwmblocks,   {.i = 5} },
 };
 

@@ -172,7 +172,6 @@ static void focusstack(const Arg *arg);
 static Atom getatomprop(Client *c, Atom prop);
 static int getrootptr(int *x, int *y);
 static long getstate(Window w);
-static pid_t getstatusbarpid();
 static int gettextprop(Window w, Atom atom, char *text, unsigned int size);
 static void grabbuttons(Client *c, int focused);
 static void grabkeys(void);
@@ -207,7 +206,8 @@ static void setup(void);
 static void seturgent(Client *c, int urg);
 static void showhide(Client *c);
 static void sigchld(int unused);
-static void sigstatusbar(const Arg *arg);
+static int getdwmblockspid();
+static void sigdwmblocks(const Arg *arg);
 static void spawn(const Arg *arg);
 static void tag(const Arg *arg);
 static void tagmon(const Arg *arg);
@@ -241,8 +241,8 @@ static void zoom(const Arg *arg);
 static const char broken[] = "broken";
 static char stext[256];
 static int statusw;
-static int statussig;
-static pid_t statuspid = -1;
+static int dwmblockssig;
+pid_t dwmblockspid = 0;
 static int screen;
 static int sw, sh;           /* X display screen geometry width, height */
 static int bh;               /* bar height */
@@ -452,7 +452,7 @@ buttonpress(XEvent *e)
         else if (ev->x > selmon->ww - statusw) {
             x = selmon->ww - statusw;
             click = ClkStatusText;
-            statussig = 0;
+            dwmblockssig = 0;
             for (text = s = stext; *s && x <= ev->x; s++) {
                 if ((unsigned char)(*s) < ' ') {
                     ch = *s;
@@ -462,7 +462,7 @@ buttonpress(XEvent *e)
                     text = s + 1;
                     if (x >= ev->x)
                         break;
-                    statussig = ch;
+                    dwmblockssig = ch;
                 }
             }
         } else
@@ -920,27 +920,15 @@ getatomprop(Client *c, Atom prop)
 }
 
 pid_t
-getstatusbarpid()
+getdwmblockspid()
 {
-	char buf[32], *str = buf, *c;
-	FILE *fp;
-
-	if (statuspid > 0) {
-		snprintf(buf, sizeof(buf), "/proc/%u/cmdline", statuspid);
-		if ((fp = fopen(buf, "r"))) {
-			fgets(buf, sizeof(buf), fp);
-			while ((c = strchr(str, '/')))
-				str = c + 1;
-			fclose(fp);
-			if (!strcmp(str, STATUSBAR))
-				return statuspid;
-		}
-	}
-	if (!(fp = popen("pidof -s "STATUSBAR, "r")))
-		return -1;
+    char buf[16];
+	FILE *fp = popen("pidof -s dwmblocks", "r");
 	fgets(buf, sizeof(buf), fp);
+	pid_t pid = strtoul(buf, NULL, 10);
 	pclose(fp);
-	return strtol(buf, NULL, 10);
+	dwmblockspid = pid;
+	return pid != 0 ? 0 : -1;
 }
 
 int
@@ -1703,17 +1691,21 @@ sigchld(int unused)
 }
 
 void
-sigstatusbar(const Arg *arg)
+sigdwmblocks(const Arg *arg)
 {
 	union sigval sv;
 
-	if (!statussig)
-		return;
-	sv.sival_int = arg->i;
-	if ((statuspid = getstatusbarpid()) <= 0)
-		return;
+	sv.sival_int = 0 | (dwmblockssig << 8) | arg->i;
+	if (!dwmblockspid)
+		if (getdwmblockspid() == -1)
+			return;
 
-	sigqueue(statuspid, SIGRTMIN+statussig, sv);
+	if (sigqueue(dwmblockspid, SIGUSR1, sv) == -1) {
+		if (errno == ESRCH) {
+			if (!getdwmblockspid())
+				sigqueue(dwmblockspid, SIGUSR1, sv);
+		}
+	}
 }
 
 void
