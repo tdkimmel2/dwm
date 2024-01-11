@@ -70,6 +70,8 @@ static const Layout layouts[] = {
 /* commands */
 static const char *dmenucmd[] = { "dmenu_run", "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "st", NULL };
+static const char *printscreencmd[] = { "scrot", "-u", "/home/tkimmel/Pictures/Screenshots/%Y-%m-%d-%s_$wx$h.jpg", NULL };
+static const char *printareacmd[] = { "scrot", "-s", "/home/tkimmel/Pictures/Screenshots/%Y-%m-%d-%s_$wx$h.jpg", NULL };
 static const char *volupcmd[] = { "/bin/sh", "-c", "amixer -D default sset Master Playback 5%+; kill -44 $(pidof dwmblocks)" };
 static const char *voldowncmd[] = { "/bin/sh", "-c", "amixer -D default sset Master Playback 5%-; kill -44 $(pidof dwmblocks)" };
 static const char *volmutecmd[] = { "/bin/sh", "-c", "amixer set Master toggle; kill -44 $(pidof dwmblocks)" };
@@ -79,6 +81,8 @@ static const Key keys[] = {
 	/* modifier                     key         function        argument */
 	{ MODKEY,                       XK_p,       spawn,          {.v = dmenucmd } },
 	{ MODKEY|ShiftMask,             XK_Return,  spawn,          {.v = termcmd } },
+	{ MODKEY,                       XK_Print,   spawn,          {.v = printscreencmd } },
+	{ MODKEY|ShiftMask,             XK_Print,   spawn,          {.v = printareacmd } },
 	{ MODKEY,                       XK_b,       togglebar,      {0} },
 	{ MODKEY,                       XK_j,       focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,       focusstack,     {.i = -1 } },

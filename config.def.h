@@ -10,8 +10,9 @@ static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "monospace:size=10" };
-static const char dmenufont[]       = "monospace:size=10";
+//static const char *fonts[]          = { "monospace:size=10" };
+static const char *fonts[]          = { "noto:size=15" };
+static const char dmenufont[]       = "monospace:size=15";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
@@ -69,15 +70,19 @@ static const Layout layouts[] = {
 /* commands */
 static const char *dmenucmd[] = { "dmenu_run", "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "st", NULL };
-static const char *volupcmd[] = { "/bin/sh", "-c", "amixer -D default sset Master Playback 5%+" };
-static const char *voldowncmd[] = { "/bin/sh", "-c", "amixer -D default sset Master Playback 5%-" };
-static const char *volmutecmd[] = { "/bin/sh", "-c", "amixer -D default sset Master Playback 0%" };
+static const char *printscreencmd[] = { "scrot", "-u", "/home/tkimmel/Pictures/Screenshots/%Y-%m-%d-%s_$wx$h.jpg", NULL };
+static const char *printareacmd[] = { "scrot", "-s", "/home/tkimmel/Pictures/Screenshots/%Y-%m-%d-%s_$wx$h.jpg", NULL };
+static const char *volupcmd[] = { "/bin/sh", "-c", "amixer -D default sset Master Playback 5%+; kill -44 $(pidof dwmblocks)" };
+static const char *voldowncmd[] = { "/bin/sh", "-c", "amixer -D default sset Master Playback 5%-; kill -44 $(pidof dwmblocks)" };
+static const char *volmutecmd[] = { "/bin/sh", "-c", "amixer set Master toggle; kill -44 $(pidof dwmblocks)" };
 //static const char *volmaxcmd[] = { "/bin/sh", "-c", "amixer -D default sset Master Playback 100%" };
 
 static const Key keys[] = {
 	/* modifier                     key         function        argument */
 	{ MODKEY,                       XK_p,       spawn,          {.v = dmenucmd } },
 	{ MODKEY|ShiftMask,             XK_Return,  spawn,          {.v = termcmd } },
+	{ MODKEY,                       XK_Print,   spawn,          {.v = printscreencmd } },
+	{ MODKEY|ShiftMask,             XK_Print,   spawn,          {.v = printareacmd } },
 	{ MODKEY,                       XK_b,       togglebar,      {0} },
 	{ MODKEY,                       XK_j,       focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,       focusstack,     {.i = -1 } },
@@ -138,9 +143,6 @@ static const Button buttons[] = {
 	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
 	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
-	{ ClkStatusText,        0,              Button1,        sigstatusbar,   {.i = 1} },
-	{ ClkStatusText,        0,              Button2,        sigstatusbar,   {.i = 2} },
-	{ ClkStatusText,        0,              Button3,        sigstatusbar,   {.i = 3} },
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
 	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
 	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
@@ -148,5 +150,10 @@ static const Button buttons[] = {
 	{ ClkTagBar,            0,              Button3,        toggleview,     {0} },
 	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
+	{ ClkStatusText,        0,              Button1,        sigdwmblocks,   {.i = 1} },
+	{ ClkStatusText,        0,              Button2,        sigdwmblocks,   {.i = 2} },
+	{ ClkStatusText,        0,              Button3,        sigdwmblocks,   {.i = 3} },
+	{ ClkStatusText,        0,              Button4,        sigdwmblocks,   {.i = 4} },
+	{ ClkStatusText,        0,              Button5,        sigdwmblocks,   {.i = 5} },
 };
 
