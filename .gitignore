@@ -1,4 +1,4 @@
-util.o
 dwm
+util.o
 dwm.o
 drw.o
